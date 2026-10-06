@@ -34,11 +34,11 @@ Trên Windows 11 PowerShell, kịch bản cần bật `$env:PYTHONUTF8='1'` đ�
 
 | Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
 |---|--:|--:|--:|--:|--:|--:|
-| Q4_K_M | 0.50 | 3559 | 522 / 625 | 26.0 / 27.0 | 2113 / 2289 / 2289 | 38.4 |
-| UD-Q2_K_XL | 0.39 | 1619 | 567 / 619 | 22.2 / 22.8 | 1973 / 2028 / 2028 | 45.0 |
+| Q4_K_M | 0.50 | 2527 | 214 / 404 | 4.5 / 5.2 | 481 / 704 / 704 | 220.0 |
+| UD-Q2_K_XL | 0.39 | 1680 | 385 / 491 | 5.3 / 6.3 | 737 / 832 / 832 | 189.3 |
 
 **Quan sát** (≤ 60 chữ):
-`UD-Q2_K_XL` decode nhanh hơn **1.17x** (45.0 vs 38.4 tok/s), tiết kiệm 22% dung lượng RAM (0.39 GB vs 0.50 GB) và giảm 54% thời gian load model. Unsloth Dynamic (UD) giữ nguyên chất lượng ở các lớp attention chính nên độ chính xác phản hồi hoàn toàn tương đương Q4_K_M.
+Khi bật GPU offload (`ngl=99` trên RTX 4060), `UD-Q2_K_XL` decode chậm hơn **1.16x** (189.3 vs 220.0 tok/s) do chi phí dequantization 2-bit trên CUDA core vượt quá lợi ích tiết kiệm băng thông VRAM. Tuy nhiên, `UD-Q2_K_XL` vẫn tiết kiệm 22% VRAM (0.39 GB vs 0.50 GB) và giảm 34% thời gian load model (1680 ms vs 2527 ms).
 
 ---
 
@@ -53,7 +53,7 @@ Trên Windows 11 PowerShell, kịch bản cần bật `$env:PYTHONUTF8='1'` đ�
 - **P95 tăng:** 4.14×
 - **Effective concurrency ở 50 users:** 42.9 so với `--parallel` = 4 slots
 
-**Peak `llamacpp:n_busy_slots_per_decode`**: 3.95 / 4 slots (98.75% slot occupancy)
+**Peak `llamacpp:n_busy_slots_per_decode`**: 3.82 / 4 slots (95.5% slot occupancy)
 
 **Saturation reading** (≤ 80 chữ):
 Server bão hoà tại ~10-15 users. Bằng chứng: Tăng load 5× nhưng throughput chỉ tăng 1.20× (3.57 → 4.27 RPS) trong khi P95 bùng nổ 4.14× (2,900 ms → 12,000 ms). Latency bùng nổ chính là queue time (concurrency 42.9 so với 4 slots). Để tăng goodput ở SLO (P95 < 3s), knob cần đổi đầu tiên là bật GPU offload (`-ngl 99`) giúp tăng tốc độ decode và giải phóng slots nhanh hơn.
