@@ -1,0 +1,104 @@
+{
+  "backend": "keyword overlap",
+  "mean_ms": {
+    "embed": 0.0,
+    "retrieve": 0.1,
+    "llm": 3758.7,
+    "total": 3758.9
+  },
+  "results": [
+    {
+      "query": "Why is goodput more useful than raw throughput?",
+      "answer": "",
+      "contexts": [
+        {
+          "id": "goodput",
+          "score": 1.0
+        },
+        {
+          "id": "paged",
+          "score": 0.0
+        },
+        {
+          "id": "radix",
+          "score": 0.0
+        }
+      ],
+      "embed_backend": "keyword overlap",
+      "timings_ms": {
+        "embed": 0.0,
+        "retrieve": 0.0,
+        "llm": 3938.4,
+        "total": 3938.5
+      },
+      "server_timings": {
+        "prompt_n": 149,
+        "prompt_ms": 367.545,
+        "predicted_n": 200,
+        "predicted_ms": 1058.853
+      }
+    },
+    {
+      "query": "What problem does PagedAttention actually solve?",
+      "answer": "",
+      "contexts": [
+        {
+          "id": "paged",
+          "score": 1.0
+        },
+        {
+          "id": "radix",
+          "score": 0.0
+        },
+        {
+          "id": "disagg",
+          "score": 0.0
+        }
+      ],
+      "embed_backend": "keyword overlap",
+      "timings_ms": {
+        "embed": 0.0,
+        "retrieve": 0.1,
+        "llm": 3637.8,
+        "total": 3637.9
+      },
+      "server_timings": {
+        "prompt_n": 112,
+        "prompt_ms": 126.992,
+        "predicted_n": 200,
+        "predicted_ms": 1128.015
+      }
+    },
+    {
+      "query": "When does splitting prefill and decode help?",
+      "answer": "",
+      "contexts": [
+        {
+          "id": "disagg",
+          "score": 2.0
+        },
+        {
+          "id": "radix",
+          "score": 1.0
+        },
+        {
+          "id": "batching",
+          "score": 1.0
+        }
+      ],
+      "embed_backend": "keyword overlap",
+      "timings_ms": {
+        "embed": 0.0,
+        "retrieve": 0.1,
+        "llm": 3700.0,
+        "total": 3700.2
+      },
+      "server_timings": {
+        "prompt_n": 111,
+        "prompt_ms": 115.552,
+        "predicted_n": 200,
+        "predicted_ms": 1181.504
+      }
+    }
+  ]
+}
