@@ -1,18 +1,5 @@
 <#
   Windows runner — the equivalent of `make <target>` for students without make.
-
-  Works in Windows PowerShell 5.1 (powershell.exe) and PowerShell 7+ (pwsh).
-
-      .\lab.ps1                 # list targets
-      .\lab.ps1 probe
-      .\lab.ps1 setup
-      .\lab.ps1 bench
-      .\lab.ps1 serve           # leave running, open a second window for the rest
-      .\lab.ps1 load-50
-      .\lab.ps1 verify
-
-  Every target maps 1:1 to the make target of the same name, so docs/GUIDE.md applies
-  as written — just substitute `.\lab.ps1 x` for `make x`.
 #>
 param(
     [Parameter(Position = 0)] [string] $Target = "help",
@@ -20,6 +7,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$env:PYTHONUTF8 = '1'
 Set-Location $PSScriptRoot
 
 $VenvPy = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
@@ -69,29 +57,20 @@ switch ($Target) {
         Write-Host "Integrate (03)"
         Write-Host "  pipeline       RAG pipeline -> llama-server"
         Write-Host ""
-        Write-Host "Submission"
-        Write-Host "  verify         Check submission readiness"
+        Write-Host "Check and Submit"
+        Write-Host "  verify         Checklist before submitting"
+        Write-Host "  clean          Wipe benchmarks\ (keep venv + models + runtime)"
+        Write-Host "  clean-all      Wipe everything including venv, runtime, models"
         Write-Host ""
         Write-Host "Bonus"
-        Write-Host "  sweep-quant | sweep-ctx | sweep-batch | sweep-gpu"
-        Write-Host "  compare-builds | build-llama | semantic-cache-offline | embed-demo-offline"
-        Write-Host ""
-        Write-Host "Housekeeping"
-        Write-Host "  clean          Remove generated reports"
-        Write-Host "  clean-all      Also remove venv, runtime, models, hardware.json"
-        Write-Host ""
-        Write-Host "You need 3 windows for the 50-user step: serve / load-50 / metrics." -ForegroundColor Yellow
+        Write-Host "  sweep-quant · sweep-ctx · sweep-batch · sweep-gpu · build-llama"
+        Write-Host "  compare-builds · embed-demo · semantic-cache"
         Write-Host ""
     }
 
     'probe'   { & $SysPy labs\00-setup\detect-hardware.py }
-    'setup'   {
-        if (-not (Test-Path '.venv')) { & $SysPy -m venv .venv }
-        & $VenvPy -m pip install --upgrade pip wheel | Out-Null
-        & $VenvPy -m pip install -r requirements.txt
-        Py labs\00-setup\setup.py
-    }
-    'runtime' { Py labs\00-setup\fetch-runtime.py --force }
+    'setup'   { & $SysPy labs\00-setup\setup.py @Rest }
+    'runtime' { & $SysPy labs\00-setup\setup.py --runtime-only }
 
     'bench'   { Py labs\01-measure\benchmark.py }
     'tune'    { Py labs\01-measure\tune.py @Rest }
@@ -138,20 +117,13 @@ switch ($Target) {
     }
 
     'clean' {
-        Remove-Item -ErrorAction SilentlyContinue benchmarks\01-*.md, benchmarks\01-*.json,
-            benchmarks\02-*.md, benchmarks\02-*.json, benchmarks\02-*.csv,
-            benchmarks\03-*.md, benchmarks\03-*.json,
-            benchmarks\locust-*.csv, benchmarks\bonus-*.md, benchmarks\bonus-*.json
+        Get-ChildItem -Path benchmarks -Include "01-*.md","01-*.json","02-*.md","02-*.json","02-*.csv","03-*.md","03-*.json","locust-*.csv","bonus-*.md","bonus-*.json" -ErrorAction SilentlyContinue | Remove-Item -Force
         Write-Host "Cleaned generated reports. Kept hardware.json, models\, runtime\, submission\."
     }
 
     'clean-all' {
-        Remove-Item -ErrorAction SilentlyContinue benchmarks\01-*.md, benchmarks\01-*.json,
-            benchmarks\02-*.md, benchmarks\02-*.json, benchmarks\02-*.csv,
-            benchmarks\03-*.md, benchmarks\03-*.json,
-            benchmarks\locust-*.csv, benchmarks\bonus-*.md, benchmarks\bonus-*.json
-        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue .venv, runtime, models,
-            bonus\llama.cpp, hardware.json
+        Get-ChildItem -Path benchmarks -Include "01-*.md","01-*.json","02-*.md","02-*.json","02-*.csv","03-*.md","03-*.json","locust-*.csv","bonus-*.md","bonus-*.json" -ErrorAction SilentlyContinue | Remove-Item -Force
+        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue .venv, runtime, models, bonus\llama.cpp, hardware.json
         Write-Host "Removed venv, runtime, models and hardware.json. Re-run: .\lab.ps1 setup"
     }
 
