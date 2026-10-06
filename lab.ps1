@@ -1,5 +1,5 @@
 <#
-  Windows runner — the equivalent of `make <target>` for students without make.
+  Windows runner - the equivalent of `make <target>` for students without make.
 #>
 param(
     [Parameter(Position = 0)] [string] $Target = "help",
@@ -16,7 +16,7 @@ $SysPy  = 'python'
 
 function Need-Venv {
     if (-not (Test-Path $VenvPy)) {
-        Write-Host "ERROR: no virtualenv found at .venv\" -ForegroundColor Red
+        Write-Host "ERROR: no virtualenv found at .venv" -ForegroundColor Red
         Write-Host "Run this first:  .\lab.ps1 setup"
         exit 1
     }
@@ -33,8 +33,8 @@ function Locust {
 switch ($Target) {
     'help' {
         Write-Host ""
-        Write-Host "Day 20 lab — Windows runner" -ForegroundColor Cyan
-        Write-Host "Usage:  .\lab.ps1 <target>"
+        Write-Host "Day 20 lab - Windows runner" -ForegroundColor Cyan
+        Write-Host "Usage:  .\lab.ps1 target"
         Write-Host ""
         Write-Host "Setup (00)"
         Write-Host "  probe          Probe hardware -> hardware.json"
@@ -59,12 +59,12 @@ switch ($Target) {
         Write-Host ""
         Write-Host "Check and Submit"
         Write-Host "  verify         Checklist before submitting"
-        Write-Host "  clean          Wipe benchmarks\ (keep venv + models + runtime)"
+        Write-Host "  clean          Wipe benchmarks (keep venv + models + runtime)"
         Write-Host "  clean-all      Wipe everything including venv, runtime, models"
         Write-Host ""
         Write-Host "Bonus"
-        Write-Host "  sweep-quant · sweep-ctx · sweep-batch · sweep-gpu · build-llama"
-        Write-Host "  compare-builds · embed-demo · semantic-cache"
+        Write-Host "  sweep-quant - sweep-ctx - sweep-batch - sweep-gpu - build-llama"
+        Write-Host "  compare-builds - embed-demo - semantic-cache"
         Write-Host ""
     }
 
@@ -78,8 +78,8 @@ switch ($Target) {
     'serve'       { Py labs\02-serve\serve.py @Rest }
     'serve-embed' { Py labs\02-serve\serve.py --embedding @Rest }
     'smoke'       { Py labs\02-serve\smoke-test.py }
-    'load-10'     { Locust -f labs\02-serve\load-test.py --headless -u 10 -r 5 -t 1m --host http://localhost:$Port --csv benchmarks\locust-10 --csv-full-history }
-    'load-50'     { Locust -f labs\02-serve\load-test.py --headless -u 50 -r 25 -t 1m --host http://localhost:$Port --csv benchmarks\locust-50 --csv-full-history }
+    'load-10'     { Locust -f labs\02-serve\load-test.py --headless -u 10 -r 5 -t 1m --host "http://localhost:$Port" --csv benchmarks\locust-10 --csv-full-history }
+    'load-50'     { Locust -f labs\02-serve\load-test.py --headless -u 50 -r 25 -t 1m --host "http://localhost:$Port" --csv benchmarks\locust-50 --csv-full-history }
     'metrics'     { Py labs\02-serve\record-metrics.py --duration 60 --label u50 }
     'load-report' { Py labs\02-serve\load-report.py }
 
@@ -118,7 +118,7 @@ switch ($Target) {
 
     'clean' {
         Get-ChildItem -Path benchmarks -Include "01-*.md","01-*.json","02-*.md","02-*.json","02-*.csv","03-*.md","03-*.json","locust-*.csv","bonus-*.md","bonus-*.json" -ErrorAction SilentlyContinue | Remove-Item -Force
-        Write-Host "Cleaned generated reports. Kept hardware.json, models\, runtime\, submission\."
+        Write-Host "Cleaned generated reports. Kept hardware.json, models, runtime, submission."
     }
 
     'clean-all' {
