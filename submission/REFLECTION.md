@@ -73,9 +73,9 @@ Server bão hoà tại ~10-15 users. Bằng chứng: Tăng load 5× nhưng throu
 **Latency split** (mean của 3 query, từ output của `pipeline.py`):
 
 - embed: 0.0 ms
-- retrieve: 0.1 ms
-- llm: 3758.7 ms
-- **stage chiếm nhiều nhất:** llm (100.0% của total 3758.9 ms)
+- retrieve: 0.3 ms
+- llm: 4103.4 ms
+- **stage chiếm nhiều nhất:** llm (100.0% của total 4103.7 ms)
 
 **Reflection** (≤ 60 chữ):
 Bottleneck nằm 100% ở LLM inference stage, hoàn toàn đúng kỳ vọng vì sinh 200 token auto-regressively tốn băng thông RAM CPU vượt trội so với tìm kiếm từ khoá. Để giảm 2× latency, phải tối ưu stage LLM (bật GPU offload `-ngl 99` hoặc dùng bản quantized `UD-Q2_K_XL`).

@@ -2,9 +2,9 @@
   "backend": "keyword overlap",
   "mean_ms": {
     "embed": 0.0,
-    "retrieve": 0.1,
-    "llm": 3758.7,
-    "total": 3758.9
+    "retrieve": 0.3,
+    "llm": 4103.4,
+    "total": 4103.7
   },
   "results": [
     {
@@ -27,15 +27,15 @@
       "embed_backend": "keyword overlap",
       "timings_ms": {
         "embed": 0.0,
-        "retrieve": 0.0,
-        "llm": 3938.4,
-        "total": 3938.5
+        "retrieve": 0.7,
+        "llm": 4609.0,
+        "total": 4609.7
       },
       "server_timings": {
-        "prompt_n": 149,
-        "prompt_ms": 367.545,
+        "prompt_n": 4,
+        "prompt_ms": 280.65,
         "predicted_n": 200,
-        "predicted_ms": 1058.853
+        "predicted_ms": 1315.978
       }
     },
     {
@@ -59,14 +59,14 @@
       "timings_ms": {
         "embed": 0.0,
         "retrieve": 0.1,
-        "llm": 3637.8,
-        "total": 3637.9
+        "llm": 3869.0,
+        "total": 3869.1
       },
       "server_timings": {
-        "prompt_n": 112,
-        "prompt_ms": 126.992,
+        "prompt_n": 4,
+        "prompt_ms": 155.255,
         "predicted_n": 200,
-        "predicted_ms": 1128.015
+        "predicted_ms": 1218.28
       }
     },
     {
@@ -89,15 +89,15 @@
       "embed_backend": "keyword overlap",
       "timings_ms": {
         "embed": 0.0,
-        "retrieve": 0.1,
-        "llm": 3700.0,
-        "total": 3700.2
+        "retrieve": 0.0,
+        "llm": 3832.1,
+        "total": 3832.2
       },
       "server_timings": {
-        "prompt_n": 111,
-        "prompt_ms": 115.552,
+        "prompt_n": 4,
+        "prompt_ms": 151.557,
         "predicted_n": 200,
-        "predicted_ms": 1181.504
+        "predicted_ms": 1211.687
       }
     }
   ]
